@@ -1,4 +1,4 @@
-# starling_slotmachine
+# starling reel rotation
 Starling extension to hande reels/wheels rotations. mostly used for slot machine games.
 
 It does not support different icon width or height in the same column.
