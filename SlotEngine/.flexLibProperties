@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="Slot.Factory.Factory"/>
+    <classEntry path="Slot.Factory.FactoryItem"/>
+    <classEntry path="Slot.Factory.FactoryManager"/>
+    <classEntry path="Slot.Factory.FactoryEnums"/>
+    <classEntry path="Slot.ILevel"/>
+    <classEntry path="Slot.ClientServerMiddleware.ClientServerMiddleware"/>
+    <classEntry path="Slot.ClientServerMiddleware.WinResultAnswer"/>
+    <classEntry path="Slot.ClientServerMiddleware.GameBaseInfo"/>
+    <classEntry path="Slot.ClientServerMiddleware.InitGameAnswer"/>
+    <classEntry path="Slot.Wheels.Rotations.RotationHelper"/>
+    <classEntry path="Slot.Wheels.Rotations.WheelRotationSprite"/>
+    <classEntry path="Slot.Wheels.Util.SoundHelper"/>
+    <classEntry path="Slot.Lines.Line"/>
+    <classEntry path="Slot.Util.TextFieldMarquee"/>
+    <classEntry path="Slot.Util.PageSlider"/>
+    <classEntry path="Slot.Util.Page"/>
+    <classEntry path="Slot.Util.LayerSorter"/>
+    <classEntry path="Slot.ClientServerMiddleware.DemoWheelProvider"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
