@@ -141,7 +141,7 @@ package starling.extensions.Slot.Wheels.Rotations
 			   //approssimo una velocità lineare in base all'andamento della funzione
 			   var end_cursor:Number = tween.getEndValue("cursor_rotation");
 			   var total_time:Number = tween.totalTime;
-			   var delta_s:Number = tween.transitionFunc(point_of_loop)*end_cursor - tween.transitionFunc(point_of_loop - 0.01)*end_cursor;
+			   var delta_s:Number = tween.transitionFunc(point_of_loop + 0.045)*end_cursor - tween.transitionFunc(point_of_loop - 0.045)*end_cursor;
 			   var delta_t:Number = total_time/100;
 			   speed = delta_s / delta_t;
 			   tween_end.onComplete = tween.onComplete;

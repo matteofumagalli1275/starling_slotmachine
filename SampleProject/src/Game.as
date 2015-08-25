@@ -1,5 +1,6 @@
 package 
 {
+	import starling.extensions.Slot.Util.ExtendedTransisions;
 	import starling.extensions.Slot.Wheels.Icon;
 	import starling.extensions.Slot.Wheels.Rotations.WheelRotation;
 	import starling.extensions.Slot.Wheels.Rotations.WheelRotationRealistic;
@@ -32,6 +33,7 @@ package
 		
         public function Game()
         {
+			ExtendedTransisions.RegisterDefaults();
 			assets = new AssetManager();
 			assets.verbose = true;
 			assets.enqueue(Assets);
@@ -101,6 +103,7 @@ package
 		
 		public function onStartPressed(evt:Event):void
 		{
+			
 			for (var i:int = 0; i < wheelmatrix.wheels.length; i++)
 			{
 				var wheel:Wheel = wheelmatrix.wheels[i];
@@ -115,11 +118,11 @@ package
 				 * */
 				rotation_handler.SetIcons(7, 2, 1, 0, 1, 7, 2, 2, 2, 4, 3);
 				/* SetTransition params:
-				 * - transition function, check starling's animation tutorial
+				 * - transition function, check starling'animation tutorial
 				 * - off_icons: number of icons that will rotate, if the number is bigger than the parameters given to SetIcons no problem. It's a circular list.
 				 * - duration (in seconds) of the rotation
 				*/
-				rotation_handler.SetTransition(Transitions.EASE_IN_OUT_BACK, 18, 4);
+				rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE, 18, 4);
 				/* BeginRotation params:
 				 * - delay (in seconds)
 				 * - point of loop beetween 0 and 1. Usually is set to 0.5 or -1. The reason of this is to handle async server response.
