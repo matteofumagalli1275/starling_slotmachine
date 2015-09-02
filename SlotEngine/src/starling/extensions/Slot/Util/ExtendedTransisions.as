@@ -27,7 +27,7 @@ package starling.extensions.Slot.Util
 				function(ratio:Number):Number
 				{
 					var invRatio:Number = ratio - 1.0;
-					var s:Number = 0.8;
+					var s:Number = 0.9;
 					return Math.pow(invRatio, 2) * ((s + 1.0)*invRatio + s) + 1.0;
 				});	
 			

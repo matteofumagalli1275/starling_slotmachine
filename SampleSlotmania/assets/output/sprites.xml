@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="sprites.png">
+	<!--
+	Created with ShoeBox
+	http://renderhjs.net/shoebox/
+	-->
+	<SubTexture name="background.png"	x="0"	y="0"	width="800"	height="600" frameX="-0" frameY="-0" frameWidth="800" frameHeight="600"/>
+	<SubTexture name="button.png"	x="892"	y="686"	width="94"	height="99" frameX="-1" frameY="-1" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="container.png"	x="0"	y="601"	width="755"	height="401" frameX="-0" frameY="-0" frameWidth="755" frameHeight="401"/>
+	<SubTexture name="icona_00.png"	x="892"	y="590"	width="98"	height="95" frameX="-20" frameY="-20" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_01.png"	x="801"	y="496"	width="111"	height="93" frameX="-12" frameY="-21" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_02.png"	x="801"	y="402"	width="112"	height="93" frameX="-12" frameY="-21" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_03.png"	x="801"	y="268"	width="135"	height="133" frameX="-0" frameY="-0" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_04.png"	x="756"	y="868"	width="135"	height="133" frameX="-0" frameY="-0" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_05.png"	x="801"	y="134"	width="135"	height="133" frameX="-0" frameY="-0" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_06.png"	x="801"	y="0"	width="135"	height="133" frameX="-0" frameY="-0" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_07.png"	x="756"	y="734"	width="135"	height="133" frameX="-0" frameY="-0" frameWidth="135" frameHeight="133"/>
+	<SubTexture name="icona_08.png"	x="756"	y="601"	width="135"	height="132" frameX="-0" frameY="-1" frameWidth="135" frameHeight="133"/>
+</TextureAtlas>

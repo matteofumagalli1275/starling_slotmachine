@@ -7,6 +7,12 @@ It does support:
   - transitions-based rotation
   - async answer from the server (keeps rotating if no answer was given)
   
+  
+ROADMAP:
+	- Fix the bad wheel stop with very delayed server answers
+	- Clean the mess
+	- Add a stop button that skips the rotation to a certain point
+  
 
 
 You can try the sample in the SampleProject directory, it's a flashdevelop project.

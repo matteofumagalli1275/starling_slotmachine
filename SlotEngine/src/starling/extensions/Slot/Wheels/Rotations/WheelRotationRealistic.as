@@ -29,12 +29,19 @@ package starling.extensions.Slot.Wheels.Rotations
 		
 		private var tween:Tween = null;
 		private var tween_loop:Tween = null;
-		private var tween_end:Tween = null;
 
 		private const _INITIALIZED_:int = 0;
 		private const _READY_:int = 1;
 		private const _MAIN_PHASE_:int = 2;
 		private const _GOT_ANSWER_:int = 3;
+		
+		private var force_same_behaviour:Boolean; //workaround for slotmania-like effects (would require n different transitions)
+		private var base_duration:Number; //only when force_same_behaviour true
+		private var base_off_icons:Number; //only when force_same_behaviour true
+		private var main_trans_backup:Number; //only when force_same_behaviour true
+		private var fsb_correction:Number; //only when force_same_behaviour true
+		private var force_looped:Boolean;
+		private var force_handled:Boolean;
 		
 		public function WheelRotationRealistic(wheel:Wheel)
 		{
@@ -43,6 +50,7 @@ package starling.extensions.Slot.Wheels.Rotations
 			//hidden at the top
 			init_hidden_icon();
 			_cursor_rotation = 0;
+			force_same_behaviour = false;
 			pending_target = null;
 			state = _INITIALIZED_;
 		}
@@ -113,9 +121,11 @@ package starling.extensions.Slot.Wheels.Rotations
 		public function SetTransition(transition:Object,off_icons:int,duration:int):void
 		{
 			tween = new Tween(this,duration,transition);
-			tween_end = new Tween(this,duration,transition);
 			this.off_icons = off_icons;
-			this.duration = duration;
+			if( force_same_behaviour == false)
+				this.duration = duration;
+			else
+				this.duration = base_duration;
 			this.transition = transition;
 		}
 		/** 
@@ -128,43 +138,77 @@ package starling.extensions.Slot.Wheels.Rotations
 	   public function BeginRotation(delay:Number,point_of_loop:Number=-1):void
 		{
 		   var self:WheelRotationRealistic = this;
-		   var speed:Number = 0;	
+		   var speed:Number = 0, delta_t:Number = 0, delta_s:Number = 0;
+		   var total_time:Number, end_cursor:Number;
 		   init_hidden_icon();
-		   tween.reset(this,this.duration,this.transition);
-		   tween_end.reset(this,this.duration,this.transition);
-		   tween.animate("cursor_rotation",off_icons * wheel.icon_height);
+		   tween.reset(this, this.duration, this.transition);
+		   if( force_same_behaviour == false)
+			tween.animate("cursor_rotation", off_icons * wheel.icon_height);
+		   else
+		    tween.animate("cursor_rotation", base_off_icons * wheel.icon_height);
 		   tween.delay = delay;
 		   tween.onComplete = end_rotation;
+		   fsb_correction = 0;
+		   force_handled = false;
+		   
+		   var loop_hook:Function = function():void
+		   {		
+			   var old_pos:int = tween.getEndValue("cursor_rotation") *tween.progress + (fsb_correction * wheel.icon_height);
+			   Starling.juggler.remove(tween);
+			   tween_loop = new Tween(self,((_rotation_values.length*wheel.icon_height)/speed * delta_t),Transitions.LINEAR);
+			   tween_loop.animate("cursor_rotation",old_pos + _rotation_values.length*wheel.icon_height);
+			   tween_loop.repeatCount = 0;
+			   tween_loop.onUpdate = function():void
+			   {
+				   if(state == _GOT_ANSWER_)
+					tween_loop.repeatCount = 1;
+			   }
+			   tween_loop.onComplete = function():void
+			   {
+				   Starling.juggler.add(tween);
+				   tween.onUpdate = null;
+			   }
+			   Starling.juggler.add(tween_loop);
+
+		   }
 		   
 		   if(point_of_loop!=-1)
 		   {
 			   //approssimo una velocità lineare in base all'andamento della funzione
-			   var end_cursor:Number = tween.getEndValue("cursor_rotation");
-			   var total_time:Number = tween.totalTime;
-			   var delta_s:Number = tween.transitionFunc(point_of_loop + 0.045)*end_cursor - tween.transitionFunc(point_of_loop - 0.045)*end_cursor;
-			   var delta_t:Number = total_time/100;
+			   end_cursor = tween.getEndValue("cursor_rotation");
+			   total_time = tween.totalTime;
+			   delta_s = tween.transitionFunc(point_of_loop + 0.045)*end_cursor - tween.transitionFunc(point_of_loop - 0.045)*end_cursor;
+			   delta_t = (point_of_loop + 0.045)*total_time  - (point_of_loop - 0.045) * total_time;
 			   speed = delta_s / delta_t;
-			   tween_end.onComplete = tween.onComplete;
+			   trace("speed: " + speed  + "   delta_t: " + delta_t);
 			   tween.onUpdate = function():void
 			   {
-				   if(tween.progress >= point_of_loop && state != _GOT_ANSWER_)
+				   if (tween.progress >= point_of_loop && force_same_behaviour == true && force_handled == false)
 				   {
-					   var old_pos:int = tween.getEndValue("cursor_rotation") *tween.progress ;
-					   Starling.juggler.remove(tween);
-					   tween_loop = new Tween(self,((_rotation_values.length*wheel.icon_height)/speed),Transitions.LINEAR);
-					   tween_loop.animate("cursor_rotation",old_pos + _rotation_values.length*wheel.icon_height);
-					   tween_loop.repeatCount = 0;
-					   tween_loop.onUpdate = function():void
-					   {
-						   if(state == _GOT_ANSWER_)
-							tween_loop.repeatCount = 1;
-					   }
+					   main_trans_backup = tween.getEndValue("cursor_rotation") * tween.progress;
+					   tween_loop = new Tween(self, (((off_icons - base_off_icons) * wheel.icon_height) / speed * delta_t), Transitions.LINEAR);
+					   tween_loop.animate("cursor_rotation",main_trans_backup + ((off_icons - base_off_icons) * wheel.icon_height));
+					   tween_loop.repeatCount = 1;
 					   tween_loop.onComplete = function():void
 					   {
-						   Starling.juggler.add(tween);
-						   tween.onUpdate= null;
+						   fsb_correction = (off_icons - base_off_icons);
+						   Starling.juggler.remove(tween_loop);
+						   if (force_looped == false || state == _GOT_ANSWER_)
+						   {
+							   Starling.juggler.add(tween);
+						   }
+						   else
+						   {
+							   loop_hook();
+						   }
+						      
 					   }
+					   Starling.juggler.remove(tween);
 					   Starling.juggler.add(tween_loop);
+					   force_handled = true;
+				   }
+				   else if(force_same_behaviour == false && tween.progress >= point_of_loop && state != _GOT_ANSWER_) {
+					   loop_hook();
 				   }
 			   }
 		   }
@@ -172,6 +216,8 @@ package starling.extensions.Slot.Wheels.Rotations
 		   this.wheel.state = Wheel._ROTATING_; //ex super
 		   Starling.juggler.add(tween);
 		}
+		
+		
 		
 	   
 		/**
@@ -192,7 +238,9 @@ package starling.extensions.Slot.Wheels.Rotations
 			var tmp_cursor:int;
 			var tmp:int;
 			var icon_on_screen:Vector.<int> = new Vector.<int>;
-
+			
+			cursor += fsb_correction*wheel.icon_height; //force same
+			
 			tmp_cursor = -1*cursor;
 			for(i=0;i<wheel.img_icons.length;i++)
 			{
@@ -317,6 +365,15 @@ package starling.extensions.Slot.Wheels.Rotations
 			hidden_icon.image.x = 0;
 			hidden_icon.image.y = 0 - wheel.offy - wheel.icon_height;
 			wheel.addChild(hidden_icon.image);
+		}
+		
+		public function setForceSameBehaviour(on:Boolean,_base_off_icons:Number, _base_duration:Number,_force_looped:Boolean):void
+		{
+			force_same_behaviour = on;
+			base_duration = _base_duration;
+			base_off_icons = _base_off_icons;
+			force_looped = _force_looped;
+			main_trans_backup = 0;
 		}
 		
 		
