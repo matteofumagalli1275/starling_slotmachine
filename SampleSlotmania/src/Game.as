@@ -87,7 +87,7 @@ package
 			{
 				var wheel:Wheel = new Wheel(TOTAL_ROW, icons, 0);
 				wheel.x = container.x + (wheel.width + ICON_OFFSET_X) * i + ICON_OFFSET_X;
-				wheel.y = container.y;
+				wheel.y = int(container.y);
 				wheel.rotation_handler = new WheelRotationRealistic(wheel);
 				list_wheels.push(wheel);
 			}
@@ -103,7 +103,7 @@ package
 		
 		public function onStartPressed(evt:Event):void
 		{
-			var base_duration:Number = 2;
+			var base_duration:Number = 4;
 			var base_off_icons:Number = 18;
 			var off_sec:Number = 0.3;
 			for (var i:int = 0; i < wheelmatrix.wheels.length; i++)
@@ -119,6 +119,7 @@ package
 				 * target icons will be 7,2,1 with off_icons = 3 ( 14 - 11%14 ) = 3
 				 * */
 				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration, true);
+				
 				rotation_handler.SetIcons(7, 2, 1, 0, 1, 7, 2, 2, 2, 4, 3);
 				/* SetTransition params:
 				 * - transition function, check starling'animation tutorial
@@ -134,7 +135,7 @@ package
 				 *   response handling.
 				 *   To communicate a server response call GotAnswer() of the rotation handler and override the target icons.
 				*/
-				rotation_handler.BeginRotation(0, 0.5);
+				rotation_handler.BeginRotation(0, 0.5, 1500);
 			}
 			button_start.enabled = false;
 			button_server.enabled = true;
