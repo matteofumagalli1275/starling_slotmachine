@@ -160,8 +160,10 @@ package starling.extensions.Slot.Wheels.Rotations
 		   
 		   var loop_hook:Function = function():void
 		   {		
-			   var old_pos:int = tween.getEndValue("cursor_rotation") *tween.progress + ((off_icons - base_off_icons) * wheel.icon_height);
-			   Starling.juggler.remove(tween);
+			   var old_pos:int = tween.getEndValue("cursor_rotation") * tween.progress;
+			   if (force_looped == true)
+				old_pos += ((off_icons - base_off_icons) * wheel.icon_height);
+
 			   tween_loop = new Tween(self,((_rotation_values.length*wheel.icon_height)/speed),Transitions.LINEAR);
 			   tween_loop.animate("cursor_rotation",old_pos + _rotation_values.length*wheel.icon_height);
 			   tween_loop.repeatCount = 0;
@@ -177,9 +179,8 @@ package starling.extensions.Slot.Wheels.Rotations
 				   Starling.juggler.add(tween);
 				   tween.onUpdate = null;
 			   }
+			   Starling.juggler.remove(tween);
 			   Starling.juggler.add(tween_loop);
-
-
 		   }
 		   
 		   if(point_of_loop!=-1)
@@ -192,12 +193,20 @@ package starling.extensions.Slot.Wheels.Rotations
 				   delta_s = tween.transitionFunc(point_of_loop + 0.045)*end_cursor - tween.transitionFunc(point_of_loop - 0.045)*end_cursor;
 				   delta_t = (point_of_loop + 0.045)*total_time  - (point_of_loop - 0.045) * total_time;
 				   speed = delta_s / delta_t;
+				   
 			   }
 
 			   tween.onUpdate = function():void
 			   {
 				   if (tween.progress >= point_of_loop && force_same_behaviour == true && force_handled == false)
 				   {
+					   if ((off_icons - base_off_icons) == 0)
+					   {
+						   force_handled = true;
+						   if(force_looped == true && state != _GOT_ANSWER_)
+						      loop_hook();
+						   return;
+					   }
 					   main_trans_backup = tween.getEndValue("cursor_rotation") * tween.progress;
 					   tween_loop = new Tween(self, (((off_icons - base_off_icons) * wheel.icon_height) / speed), Transitions.LINEAR);
 					   tween_loop.animate("cursor_rotation",main_trans_backup + ((off_icons - base_off_icons) * wheel.icon_height));
@@ -321,10 +330,11 @@ package starling.extensions.Slot.Wheels.Rotations
 			var i:int;
 			var tmp:int;
 			var index_rotation_icons:int;
+			var cursor:int = Math.ceil(_cursor_rotation + fsb_correction * wheel.icon_height);
 			
-			if(_cursor_rotation%(wheel.icon_height+wheel.offy) == 0)
+			if(cursor%(wheel.icon_height+wheel.offy) == 0)
 			{
-				tmp_cursor = -1*_cursor_rotation;
+				tmp_cursor = -1*(cursor + fsb_correction);
 				for(i=0;i<wheel.img_icons.length;i++)
 				{
 					tmp = (tmp_cursor)/(wheel.icon_height+wheel.offy); //force conversion to int

@@ -103,13 +103,21 @@ package
 		
 		public function onStartPressed(evt:Event):void
 		{
-			var base_duration:Number = 4;
+			var base_duration:Number = 60;
 			var base_off_icons:Number = 18;
-			var off_sec:Number = 0.3;
+			var off_sec:Number = 0.5;
 			for (var i:int = 0; i < wheelmatrix.wheels.length; i++)
 			{
 				var wheel:Wheel = wheelmatrix.wheels[i];
 				var rotation_handler:WheelRotationRealistic = wheelmatrix.wheels[i].rotation_handler as WheelRotationRealistic;
+				/* workaround to keep the same transition effect even if the duration is different. To do that the transaction is freezed and replaced
+				 * with a linear transaction to correct the offset.
+				 * on: enable or disable thid mode
+				 * base_off_icons: reference value of the transition effect
+				 * base_duration: reference value of the transition effect
+				 * force_looped: will need to handle async request too? (true/false)
+				*/
+				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration, true);
 				/*
 				 * List of icons that will rotate, the result on the screen is calculated like this: 
 				 * last_icon_index = N - off_icons%N  (this will be the icon on the bottom)
@@ -118,24 +126,23 @@ package
 				 * (correct sequence is (oi,oi,oi,7, 2, 1, 0, 1, 7, 2, 2, 2, 4, 3) where 'oi' is the old icon)
 				 * target icons will be 7,2,1 with off_icons = 3 ( 14 - 11%14 ) = 3
 				 * */
-				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration, true);
-				
 				rotation_handler.SetIcons(7, 2, 1, 0, 1, 7, 2, 2, 2, 4, 3);
 				/* SetTransition params:
 				 * - transition function, check starling'animation tutorial
 				 * - off_icons: number of icons that will rotate, if the number is bigger than the parameters given to SetIcons no problem. It's a circular list.
 				 * - duration (in seconds) of the rotation
 				*/
-				//rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE, base_off_icons, base_duration);
-				rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE,  (base_duration + i * off_sec) * base_off_icons/base_duration, base_duration + i * off_sec);
+				rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE_PLAIN,  (base_duration + i * off_sec) * base_off_icons/base_duration, base_duration + i * off_sec);
 				/* BeginRotation params:
 				 * - delay (in seconds)
 				 * - point of loop beetween 0 and 1. Usually is set to 0.5 or -1. The reason of this is to handle async server response.
 				 *   If there is no response from the server the rotation will be looped in that point of the transaction. If -1 there is no server
 				 *   response handling.
 				 *   To communicate a server response call GotAnswer() of the rotation handler and override the target icons.
+				 * - speed: by default is calculated but ti works only with some points of loop depending on the curve. I suggest to
+				 * 	 calibrate it by hand for now.
 				*/
-				rotation_handler.BeginRotation(0, 0.5, 1500);
+				rotation_handler.BeginRotation(0,0.5);
 			}
 			button_start.enabled = false;
 			button_server.enabled = true;
