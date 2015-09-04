@@ -103,7 +103,7 @@ package
 		
 		public function onStartPressed(evt:Event):void
 		{
-			var base_duration:Number = 2;
+			var base_duration:Number = 4;
 			var base_off_icons:Number = 18;
 			var off_sec:Number = 0.5;
 			for (var i:int = 0; i < wheelmatrix.wheels.length; i++)
@@ -132,7 +132,7 @@ package
 				 * - off_icons: number of icons that will rotate, if the number is bigger than the parameters given to SetIcons no problem. It's a circular list.
 				 * - duration (in seconds) of the rotation
 				*/
-				rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE_PLAIN,  (base_duration + i * off_sec) * base_off_icons/base_duration, base_duration + i * off_sec);
+				rotation_handler.SetTransition(ExtendedTransisions.WHEEL_OUT_BOUNCE,  (base_duration + i * off_sec) * base_off_icons/base_duration, base_duration + i * off_sec);
 				/* BeginRotation params:
 				 * - delay (in seconds)
 				 * - point of loop beetween 0 and 1. Usually is set to 0.5 or -1. The reason of this is to handle async server response.
@@ -142,7 +142,7 @@ package
 				 * - speed: by default is calculated but ti works only with some points of loop depending on the curve. I suggest to
 				 * 	 calibrate it by hand for now.
 				*/
-				rotation_handler.BeginRotation(0,0.5);
+				rotation_handler.BeginRotation(0,0.5,1500);
 			}
 			button_start.enabled = false;
 			button_server.enabled = true;
