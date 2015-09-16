@@ -30,6 +30,7 @@ package
 		private var wheelmatrix:WheelMatrix;
 		private var button_start:Button;
 		private var button_server:Button;
+		private var button_stop:Button;
 		
         public function Game()
         {
@@ -69,6 +70,11 @@ package
 			button_server.color = Color.YELLOW;
 			button_server.enabled = false;
 			
+			button_stop = new Button(assets.getTexture("button.png"), "STOP");
+			button_stop.addEventListener(Event.TRIGGERED, onStopPressed);
+			button_stop.color = Color.YELLOW;
+			button_stop.enabled = false;
+			
 			InitScene();
 		}
 		
@@ -76,10 +82,12 @@ package
 		{
 			container.x = Starling.current.viewPort.width / 2 - container.width / 2;
 			container.y =  Starling.current.viewPort.height / 2 - container.height / 2;
-			button_start.x = Starling.current.viewPort.width / 2 - button_start.width;
+			button_start.x = Starling.current.viewPort.width / 2 - button_start.width - button_stop.width;
 			button_start.y = (container.y + container.height);
 			button_server.x = button_start.x + button_start.width;
 			button_server.y = button_start.y;
+			button_stop.x = button_server.x + button_server.width;
+			button_stop.y = button_server.y;
 
 			//Each wheel is a column
 			var list_wheels:Vector.<Wheel> = new Vector.<Wheel>();
@@ -99,6 +107,7 @@ package
 			addChild(container);
 			addChild(button_start);
 			addChild(button_server);
+			addChild(button_stop);
 		}
 		
 		public function onStartPressed(evt:Event):void
@@ -142,10 +151,26 @@ package
 				 * - speed: by default is calculated but ti works only with some points of loop depending on the curve. I suggest to
 				 * 	 calibrate it by hand for now.
 				*/
+				if(i>0)
+					rotation_handler.setWheelToWaitFor(wheelmatrix.wheels[i - 1]);
 				rotation_handler.BeginRotation(0,0.5);
 			}
 			button_start.enabled = false;
+			button_stop.enabled = false;
 			button_server.enabled = true;
+		}
+		
+		public function onStopPressed(evt:Event):void
+		{
+			for (var i:int = 0; i < wheelmatrix.wheels.length; i++)
+			{
+				var wheel:Wheel = wheelmatrix.wheels[i];
+				var rotation_handler:WheelRotationRealistic = wheelmatrix.wheels[i].rotation_handler as WheelRotationRealistic;
+				if(rotation_handler.canForceStop())
+					rotation_handler.forceStop(0.92);
+			}
+			button_stop.enabled = false;
+			
 		}
 		
 		public function onAnswerPressed(evt:Event):void
@@ -158,6 +183,7 @@ package
 				rotation_handler.gotAnswer();
 			}
 			button_server.enabled = false;
+			button_stop.enabled = true;
 		}
 		
 		public function onEndRotation(evt:Event):void
