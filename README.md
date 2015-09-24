@@ -9,9 +9,9 @@ It does support:
   
   
 ROADMAP:
-	- Fix the bad wheel stop with very delayed server answers
+	- [DONE] Fix the bad wheel stop with very delayed server answers
 	- Clean the mess
-	- Add a stop button that skips the rotation to a certain point
+	- [DONE] Add a stop button that skips the rotation to a certain point
   
 
 
