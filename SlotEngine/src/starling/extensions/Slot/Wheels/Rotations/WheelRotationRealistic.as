@@ -330,19 +330,22 @@ package starling.extensions.Slot.Wheels.Rotations
 			{
 				for (i = 0; i < wheel.img_icons.length; i++)
 				{
-					index_rotation_icons = rotation_values.length - off_icons % rotation_values.length + i;
+					index_rotation_icons = rotation_values.length - (off_icons % rotation_values.length) + i;
 					if (index_rotation_icons < 0)
 						index_rotation_icons += _rotation_values.length;
-					
+					if (index_rotation_icons >= rotation_values.length)
+						index_rotation_icons -= _rotation_values.length;
 					if (icon_on_screen.indexOf(index_rotation_icons) != -1)
 						return;
 				}
 				
 				for (i = 0; i < wheel.img_icons.length; i++)
 				{
-					index_rotation_icons = rotation_values.length - off_icons % rotation_values.length + i;
-					if (index_rotation_icons < 0)
+					index_rotation_icons = rotation_values.length - (off_icons % rotation_values.length) + i;
+					if (index_rotation_icons <= 0)
 						index_rotation_icons += _rotation_values.length;
+					if (index_rotation_icons >= rotation_values.length)
+						index_rotation_icons -= _rotation_values.length;
 					rotation_values[index_rotation_icons] = pending_target[i];
 				}
 				
