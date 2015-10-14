@@ -6,14 +6,11 @@ It does not support different icon width or height in the same column.
 It does support:
   - transitions-based rotation
   - async answer from the server (keeps rotating if no answer was given)
+  - stop rotation with bounce
+  - Mobile, Desktop and Browsers (tested on Android and Windows desktop)
   
-  
-ROADMAP:
-	- [DONE] Fix the bad wheel stop with very delayed server answers
-	- Clean the mess
-	- [DONE] Add a stop button that skips the rotation to a certain point
-  
+Know issues:
+  - on pepper flash isn't as smooth as flash player.
 
-
-You can try the sample in the SampleProject directory, it's a flashdevelop project.
+You can try the samples in the SampleXXX directory, they are flashdevelop projects.
 You need to have flashdevelop configured for starling.

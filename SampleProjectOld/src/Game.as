@@ -130,7 +130,7 @@ package
 				 *   response handling.
 				 *   To communicate a server response call GotAnswer() of the rotation handler and override the target icons.
 				*/
-				rotation_handler.BeginRotation(i, 0.5);
+				rotation_handler.BeginRotation(i/4, 0.2);
 			}
 			button_start.enabled = false;
 			button_server.enabled = true;

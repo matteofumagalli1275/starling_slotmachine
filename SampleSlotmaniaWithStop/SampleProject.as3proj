@@ -10,7 +10,7 @@
     <movie height="600" />
     <movie version="18" />
     <movie minorVersion="0" />
-    <movie platform="AIR" />
+    <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->

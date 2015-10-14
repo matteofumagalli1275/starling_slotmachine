@@ -117,7 +117,7 @@ package
 				 * base_duration: reference value of the transition effect
 				 * force_looped: will need to handle async request too? (true/false)
 				*/
-				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration, true);
+				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration);
 				/*
 				 * List of icons that will rotate, the result on the screen is calculated like this: 
 				 * last_icon_index = N - off_icons%N  (this will be the icon on the bottom)
@@ -139,7 +139,7 @@ package
 				 *   If there is no response from the server the rotation will be looped in that point of the transaction. If -1 there is no server
 				 *   response handling.
 				 *   To communicate a server response call GotAnswer() of the rotation handler and override the target icons.
-				 * - speed: by default is calculated but ti works only with some points of loop depending on the curve. I suggest to
+				 * - speed: by default is calculated but it works only with some points of loop depending on the curve. I suggest to
 				 * 	 calibrate it by hand for now.
 				*/
 				rotation_handler.BeginRotation(0,0.5,1500);

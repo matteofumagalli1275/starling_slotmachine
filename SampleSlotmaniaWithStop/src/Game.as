@@ -126,7 +126,7 @@ package
 				 * base_duration: reference value of the transition effect
 				 * force_looped: will need to handle async request too? (true/false)
 				*/
-				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration, true);
+				rotation_handler.setForceSameBehaviour(true, base_off_icons, base_duration);
 				/*
 				 * List of icons that will rotate, the result on the screen is calculated like this: 
 				 * last_icon_index = N - off_icons%N  (this will be the icon on the bottom)
